@@ -1,0 +1,41 @@
+{
+ "answers": [
+  {
+   "answer": [
+    "PUT"
+   ],
+   "match": "Which HTTP method is idempotent?"
+  },
+  {
+   "answer": [
+    "2",
+    "3"
+   ],
+   "match": "Select all prime numbers."
+  },
+  {
+   "match": "Chemical symbol for gold",
+   "answer": "Au"
+  },
+  {
+   "match": "TCP handshake",
+   "answer": "True"
+  },
+  {
+   "match": "7 x 6",
+   "answer": "42"
+  },
+  {
+   "match": "exact:Tokyo",
+   "answer": "Japan"
+  },
+  {
+   "match": "exact:Cairo",
+   "answer": "Egypt"
+  },
+  {
+   "match": "exact:Lima",
+   "answer": "Peru"
+  }
+ ]
+}

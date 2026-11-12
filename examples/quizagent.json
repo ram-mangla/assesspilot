@@ -1,0 +1,44 @@
+{
+  "version": "1.0",
+  "target": {
+    "url": "http://127.0.0.1:5055/single",
+    "adapter": "auto",
+    "custom_profile": null
+  },
+  "browser": {
+    "headless": false,
+    "cdp_url": null,
+    "profile_dir": null,
+    "timeout": 30000
+  },
+  "auth": {
+    "mode": "none",
+    "username": null,
+    "password_env": "QA_PASS",
+    "storage_state": null
+  },
+  "strategy": {
+    "mode": "ai",
+    "key_file": null,
+    "fallback": "skip",
+    "text_default": "test"
+  },
+  "ai": {
+    "enabled": true,
+    "provider": "nvidia",
+    "model": "nemotron_ultra",
+    "review_mode": true,
+    "confidence_threshold": 0.6,
+    "timeout": 45.0
+  },
+  "execution": {
+    "behavior": "student",
+    "speed": 1.0,
+    "seed": 0,
+    "max_steps": 150,
+    "trace": false,
+    "confirm_submit": true,
+    "output_dir": "runs",
+    "cache_dir": ".quizagent_cache"
+  }
+}

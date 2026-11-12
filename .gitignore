@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments & Virtual Envs
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables & Sensitive Credentials
+.env
+.env.*
+!.env.example
+.continue/.env
+.continue/*
+!.continue/.gitkeep
+
+# Playwright & Browser Sessions / State / Cookies
+qa_cookies.json
+*qa_cookies.json
+.quizagent_cache/
+state/
+*.session
+*.storage_state.json
+chrome-profile/
+qa-profile/
+
+# Logs & Run Reports
+runs/
+*.log
+.scratch/
+.scratch_store/
+.superbrain/
+
+# Testing & Type Checking
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Operating System Specific
+.DS_Store
+Thumbs.db
+desktop.ini

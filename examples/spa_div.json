@@ -1,0 +1,7 @@
+{
+  "name": "spa-div",
+  "match": {"url": "/spa"},
+  "question": {"container": ".qbox", "prompt": ".stem", "option": ".opt", "selected": ".selected", "multi": "re:select all"},
+  "nav": {"next": "#next", "prev": "#prev", "submit": "#submit", "confirm": "#yes"},
+  "done": ["#result"]
+}

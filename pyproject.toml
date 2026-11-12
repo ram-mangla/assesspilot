@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quizpilot"
+version = "1.0.0"
+description = "Self-learning browser automation harness and AI copilot CLI for web assessments. Built with Playwright, NVIDIA NIM, and OpenRouter."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [
+    { name = "Ram Mangla", email = "manglaram69@gmail.com" }
+]
+keywords = [
+    "playwright",
+    "browser-automation",
+    "quiz",
+    "assessment",
+    "cli",
+    "python",
+    "self-learning",
+    "ai-agent",
+    "edtech"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "playwright>=1.45.0",
+    "flask>=3.0.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "build>=1.0.0",
+    "twine>=5.0.0",
+]
+
+[project.scripts]
+quizpilot = "quizagent.cli:main"
+quizagent = "quizagent.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ram-mangla/quizpilot"
+Repository = "https://github.com/ram-mangla/quizpilot"
+Issues = "https://github.com/ram-mangla/quizpilot/issues"
+Changelog = "https://github.com/ram-mangla/quizpilot/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["quizagent*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

@@ -1,0 +1,40 @@
+{
+  "answers": [
+    {
+      "match": "Which HTTP method is idempotent?",
+      "answer": "PUT"
+    },
+    {
+      "match": "Select all prime numbers.",
+      "answer": ["2", "3"]
+    },
+    {
+      "match": "The TCP handshake uses three packets.",
+      "answer": "True"
+    },
+    {
+      "match": "Capital of France?",
+      "answer": "Paris"
+    },
+    {
+      "match": "Chemical symbol for gold?",
+      "answer": "Au"
+    },
+    {
+      "match": "What is 7 x 6?",
+      "answer": "42"
+    },
+    {
+      "match": "re:not found",
+      "answer": "404"
+    },
+    {
+      "match": "exact:Tokyo",
+      "answer": "Japan"
+    },
+    {
+      "match": "exact:Cairo",
+      "answer": "Egypt"
+    }
+  ]
+}
