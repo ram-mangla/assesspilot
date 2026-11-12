@@ -134,7 +134,7 @@ def build_agent_from_params(params: Dict[str, Any]) -> Agent:
 
 def build_parser() -> argparse.ArgumentParser:
     """Create the primary argument parser with all subcommands."""
-    prog_name = "quizpilot"
+    prog_name = "assesspilot"
     if sys.argv and sys.argv[0]:
         stem = Path(sys.argv[0]).stem
         if "quizagent" in stem:
@@ -142,7 +142,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     ap = argparse.ArgumentParser(
         prog=prog_name,
-        description="QuizPilot: Self-learning browser automation harness and AI copilot CLI for web assessments.",
+        description="AssessPilot: Autonomous, self-learning browser assessment test harness and AI copilot.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     ap.add_argument("-v", "--version", action="version", version=f"%(prog)s {__version__}")
@@ -158,7 +158,7 @@ def build_parser() -> argparse.ArgumentParser:
     cfg_p = sub.add_parser("config", help="Manage configuration profiles")
     cfg_sub = cfg_p.add_subparsers(dest="config_cmd", required=True)
     cfg_init = cfg_sub.add_parser("init", help="Generate a starter configuration file")
-    cfg_init.add_argument("-o", "--output", default="quizpilot.yaml", help="Destination path (e.g. quizpilot.yaml or quizpilot.json)")
+    cfg_init.add_argument("-o", "--output", default="assesspilot.yaml", help="Destination path (e.g. assesspilot.yaml or assesspilot.json)")
     cfg_init.add_argument("-f", "--format", choices=["yaml", "json"], default="yaml", help="Format to generate")
 
     # ---- run, probe, auto

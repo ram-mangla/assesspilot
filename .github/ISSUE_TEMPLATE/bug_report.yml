@@ -1,5 +1,5 @@
 name: "🐛 Bug Report"
-description: "Report a bug or unexpected behavior in QuizPilot"
+description: "Report a bug or unexpected behavior in AssessPilot"
 title: "[Bug]: "
 labels: ["bug", "triage"]
 body:
@@ -10,8 +10,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: QuizPilot Version
-      description: What version of QuizPilot are you running? (Run `quizpilot --version`)
+      label: AssessPilot Version
+      description: What version of AssessPilot are you running? (Run `assesspilot --version`)
       placeholder: "e.g. 1.0.0"
     validations:
       required: true

@@ -165,7 +165,7 @@ class Doctor:
         counts = res["summary"]
 
         print("\n" + "=" * 70)
-        print(f" QuizAgent Doctor v{__version__} - Environment Diagnostic")
+        print(f" AssessPilot Doctor v{__version__} - Environment Diagnostic")
         print("=" * 70 + "\n")
 
         current_cat = None

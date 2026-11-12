@@ -1,16 +1,16 @@
-# QuizPilot
+# AssessPilot
 
-[![CI](https://github.com/ram-mangla/quizpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/ram-mangla/quizpilot/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/ram-mangla/quizpilot?color=blue)](https://github.com/ram-mangla/quizpilot/releases)
+[![CI](https://github.com/ram-mangla/assesspilot/actions/workflows/ci.yml/badge.svg)](https://github.com/ram-mangla/assesspilot/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/ram-mangla/assesspilot?color=blue)](https://github.com/ram-mangla/assesspilot/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Playwright](https://img.shields.io/badge/playwright-1.45+-green.svg)](https://playwright.dev/)
 
-> **A reliable, self-learning browser automation harness and AI copilot CLI for web assessments.**
+> **Autonomous, self-learning browser assessment test harness and AI copilot for web evaluations and certification exams.**
 
-QuizPilot drives assessment, quiz, and test web applications using a real Chromium browser via Playwright (`discover -> scan -> answer -> navigate -> submit -> verify`). Built strictly for **authorized practice, self-paced learning, and QA/load testing of platforms you own or are explicitly authorized to test**.
+AssessPilot drives assessment, evaluation, and test web applications using a real Chromium browser via Playwright (`discover -> scan -> answer -> navigate -> submit -> verify`). Engineered strictly for **authorized practice, self-paced training, and QA/load testing of platforms you own or are explicitly authorized to test**.
 
-*(Note: For backward compatibility, both `quizpilot` and `quizagent` commands are supported identically).*
+*(Note: For backward compatibility, both `assesspilot` and `quizagent` commands are supported identically).*
 
 Answers can originate from an exact **Answer Key file**, an **AI-assisted model chain** (NVIDIA NIM or OpenRouter) with interactive **human-in-the-loop review**, or deterministic **fallback strategies** (first, last, random).
 
@@ -27,37 +27,36 @@ Answers can originate from an exact **Answer Key file**, an **AI-assisted model 
    - [macOS](#macos-installation)
 5. [First-Run Health Check (`doctor`)](#first-run-health-check)
 6. [Interactive Guided CLI](#interactive-guided-cli)
-7. [Direct CLI Commands](#direct-cli-commands)
+7. [Direct CLI Workflows](#direct-cli-workflows)
 8. [Authentication Modes](#authentication-modes)
 9. [Chrome Profile & Session Management](#chrome-profile--session-management)
 10. [Saved Playwright Sessions](#saved-playwright-sessions)
 11. [AI Providers & Model Routing](#ai-providers--model-routing)
 12. [Adaptive Self-Learning & DOM Evolution](#adaptive-self-learning--dom-evolution)
 13. [Configuration Reference (YAML / JSON)](#configuration-reference)
-14. [Local Practice Assessment Demo](#local-practice-assessment-demo)
-15. [Security & Responsible Use](#security--responsible-use)
-16. [Architecture](#architecture)
-17. [Troubleshooting & Diagnostics](#troubleshooting--diagnostics)
-18. [Development & Automated Testing](#development--automated-testing)
-19. [Contributing](#contributing)
-20. [Roadmap](#roadmap)
-21. [License](#license)
+14. [Security & Responsible Use](#security--responsible-use)
+15. [Architecture](#architecture)
+16. [Troubleshooting & Diagnostics](#troubleshooting--diagnostics)
+17. [Development & Automated Testing](#development--automated-testing)
+18. [Contributing](#contributing)
+19. [Roadmap](#roadmap)
+20. [License](#license)
 
 ---
 
 ## 1. Features
 
-- **Adaptive Self-Learning Engine:** Learns arbitrary DOM patterns, question container clusters, button selectors, and Markov state transition graphs dynamically as you browse.
-- **Robust DOM Heuristics:** Scans native radio buttons, checkboxes, dropdown selects, text fields, textareas, numeric inputs, ARIA widgets (`role="radio"`, `role="checkbox"`), open Shadow DOM, and iframes.
-- **Human-in-the-Loop Review:** Interactive review prompt allows learners to accept, modify, or reject AI model suggestions before anything is clicked.
+- **Adaptive Self-Learning Engine:** Dynamically mines DOM patterns, question container clusters, button selectors, and Markov state transition graphs as you navigate arbitrary evaluation platforms.
+- **Universal DOM Heuristics:** Scans native radio buttons, checkboxes, dropdown selects, text fields, textareas, numeric inputs, ARIA widgets (`role="radio"`, `role="checkbox"`), open Shadow DOM, and iframes.
+- **Human-in-the-Loop Review:** Interactive review prompt allows learners to inspect, modify, or reject AI model suggestions before anything is clicked or submitted.
 - **Multiple Authentication Methods:** Supports public assessments, credentials via environment variables / masked prompts, persistent Chrome profiles, CDP remote debugging, and saved Playwright storage state files.
 - **Dual Execution Engine:**
-  - Guided interactive terminal wizard (`quizpilot run`).
+  - Guided interactive terminal wizard (`assesspilot run`).
   - Direct, scriptable command-line arguments and configuration files.
 - **AI Model Routing:** Integrated with OpenAI-compatible APIs (NVIDIA NIM and OpenRouter) with automatic fallback chains (`nemotron_ultra`, `nemotron_lightning`, `nemotron_super_vl`, `north_mini_code`, `gemma_4`).
 - **Simulated Pacing Profiles:** Realistic behavior models (`instant`, `student`, `careful`, `erratic`) with reading delays, thinking pauses, answer changes, and revisit probabilities.
-- **Verified Metrics Only:** Measures actual DOM facts. Never estimates scores or fabricates success rates.
-- **Live Local Control Dashboard:** Built-in token-gated web dashboard (`quizpilot serve`) running strictly on `127.0.0.1`.
+- **Verified Metrics Only:** Measures actual DOM facts and server confirmations. Never estimates scores or fabricates success rates.
+- **Live Local Control Dashboard:** Built-in token-gated web dashboard (`assesspilot serve`) running strictly on `127.0.0.1`.
 
 ---
 
@@ -66,13 +65,13 @@ Answers can originate from an exact **Answer Key file**, an **AI-assisted model 
 ### CLI Command Center & Help Output
 ![CLI Help Output](screenshots/01_cli_help.png)
 
-### System Diagnostics (`quizpilot doctor`)
+### System Diagnostics (`assesspilot doctor`)
 ![System Diagnostics](screenshots/02_doctor_check.png)
 
 ### Guided Interactive Wizard
 ![Interactive Wizard](screenshots/03_interactive_wizard.png)
 
-### Practice Assessment DOM Detection
+### Assessment DOM Detection
 ![Assessment Detection](screenshots/04_browser_assessment_detection.png)
 
 ### User-Reviewed Answer Assistance
@@ -97,8 +96,8 @@ Answers can originate from an exact **Answer Key file**, an **AI-assisted model 
 
 ```powershell
 # 1. Clone the repository
-git clone https://github.com/ram-mangla/quizpilot.git
-cd quizpilot
+git clone https://github.com/ram-mangla/assesspilot.git
+cd assesspilot
 
 # 2. Run the automated setup script
 .\setup.bat
@@ -115,8 +114,8 @@ python -m playwright install chromium
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/ram-mangla/quizpilot.git
-cd quizpilot
+git clone https://github.com/ram-mangla/assesspilot.git
+cd assesspilot
 
 # 2. Run the automated setup script
 chmod +x setup.sh
@@ -134,8 +133,8 @@ python -m playwright install chromium
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/ram-mangla/quizpilot.git
-cd quizpilot
+git clone https://github.com/ram-mangla/assesspilot.git
+cd assesspilot
 
 # 2. Run setup script or install via pip
 python3 -m venv .venv
@@ -147,8 +146,8 @@ python -m playwright install chromium
 
 Verify your installation:
 ```bash
-quizpilot --version
-quizpilot doctor
+assesspilot --version
+assesspilot doctor
 ```
 
 ---
@@ -158,10 +157,10 @@ quizpilot doctor
 Before running your first assessment, run the built-in diagnostic tool to verify all requirements:
 
 ```bash
-quizpilot doctor
+assesspilot doctor
 ```
 
-`quizpilot doctor` verifies:
+`assesspilot doctor` verifies:
 - Python version and architecture.
 - Playwright installation and Chromium browser binary status.
 - System Google Chrome executable detection.
@@ -174,10 +173,10 @@ quizpilot doctor
 
 ## 6. Interactive Guided CLI
 
-Launch QuizPilot without arguments to enter the guided setup wizard:
+Launch AssessPilot without arguments to enter the guided setup wizard:
 
 ```bash
-quizpilot run
+assesspilot run
 ```
 
 The wizard prompts you through:
@@ -192,16 +191,16 @@ The wizard prompts you through:
 
 ---
 
-## 7. Direct CLI Commands
+## 7. Direct CLI Workflows
 
 ### Direct URL Execution
 ```bash
-quizpilot run "http://127.0.0.1:5055/single" --key examples/key_example.json
+assesspilot run "https://assessment.example.edu/exam" --key examples/key_example.json
 ```
 
 ### AI-Assisted Practice with Human Review
 ```bash
-quizpilot run "http://127.0.0.1:5055/single" \
+assesspilot run "https://assessment.example.edu/exam" \
   --ai-provider nvidia \
   --ai-model nemotron_ultra \
   --ai-review
@@ -209,26 +208,26 @@ quizpilot run "http://127.0.0.1:5055/single" \
 
 ### Offline / Mock AI Practice
 ```bash
-quizpilot run "http://127.0.0.1:5055/single" --mock-ai
+assesspilot run "https://assessment.example.edu/exam" --mock-ai
 ```
 
 ### Dry Run DOM Inspection (`probe`)
-Inspect what QuizPilot's DOM scanner detects without answering or submitting:
+Inspect what AssessPilot's DOM scanner detects without answering or submitting:
 ```bash
-quizpilot probe "http://127.0.0.1:5055/single"
+assesspilot probe "https://assessment.example.edu/exam"
 ```
 
 ### Autopilot Discovery & Crawler (`auto`)
-Crawl same-origin links to find and take quizzes:
+Crawl same-origin links to find and take assessment modules:
 ```bash
-quizpilot auto "http://127.0.0.1:5055/hub" --list
-quizpilot auto "http://127.0.0.1:5055/hub" --pick "networking" --key examples/key_example.json
+assesspilot auto "https://assessment.example.edu/portal" --list
+assesspilot auto "https://assessment.example.edu/portal" --pick "networking" --key examples/key_example.json
 ```
 
 ### Cache Management & Self-Learning Inspection
 ```bash
-quizpilot cache show
-quizpilot cache clear
+assesspilot cache show
+assesspilot cache clear
 ```
 
 ---
@@ -238,7 +237,7 @@ quizpilot cache clear
 ### A. Public / Unauthenticated
 Assessments that do not require credentials:
 ```bash
-quizpilot run "http://127.0.0.1:5055/single"
+assesspilot run "https://assessment.example.edu/exam"
 ```
 
 ### B. Form-Based Username & Password
@@ -246,13 +245,13 @@ Passwords can be provided via environment variables, files, or masked interactiv
 
 ```bash
 # Recommended: Environment variable
-QA_PASS="SecretPassword123" quizpilot run "https://moodle.example.edu/quiz" --user student1
+QA_PASS="SecretPassword123" assesspilot run "https://assessment.example.edu/exam" --user student1
 
 # Password file
-quizpilot run "https://moodle.example.edu/quiz" --user student1 --pass-file /path/to/pw.txt
+assesspilot run "https://assessment.example.edu/exam" --user student1 --pass-file /path/to/pw.txt
 
 # Interactive prompt (password input is masked and excluded from logs)
-quizpilot run "https://moodle.example.edu/quiz" --user student1
+assesspilot run "https://assessment.example.edu/exam" --user student1
 ```
 
 ---
@@ -264,20 +263,20 @@ Attach to your personal Chrome instance where you are already signed in:
 
 1. Launch Chrome with remote debugging enabled:
    ```bash
-   quizpilot chrome --port 9222
+   assesspilot chrome --port 9222
    ```
 2. Log into your institution or platform in that opened window.
-3. Run QuizPilot against the assessment tab:
+3. Run AssessPilot against the assessment tab:
    ```bash
-   quizpilot run "https://site.example.com/quiz" --cdp http://127.0.0.1:9222
+   assesspilot run "https://assessment.example.edu/exam" --cdp http://127.0.0.1:9222
    # Or drive the currently active tab:
-   quizpilot run here --cdp http://127.0.0.1:9222
+   assesspilot run here --cdp http://127.0.0.1:9222
    ```
 
 ### Persistent Profile Directory
 Create an isolated profile that persists cookies across runs:
 ```bash
-quizpilot run "https://site.example.com/quiz" --profile ~/.quizpilot/my-profile --headed --user student1
+assesspilot run "https://assessment.example.edu/exam" --profile ~/.assesspilot/my-profile --headed --user student1
 ```
 
 ---
@@ -287,16 +286,16 @@ quizpilot run "https://site.example.com/quiz" --profile ~/.quizpilot/my-profile 
 Export and reuse authenticated Playwright storage states:
 
 ```bash
-quizpilot run "https://site.example.com/quiz" --session ~/.quizagent_cache/state/session.json
+assesspilot run "https://assessment.example.edu/exam" --session ~/.quizagent_cache/state/session.json
 ```
 
-> **Security Note:** Session files contain authorization cookies and tokens. QuizPilot automatically applies `0600` file permissions to restrict access to the current user. Session files are strictly excluded in `.gitignore`.
+> **Security Note:** Session files contain authorization cookies and tokens. AssessPilot automatically applies `0600` file permissions to restrict access to the current user. Session files are strictly excluded in `.gitignore`.
 
 ---
 
 ## 11. AI Providers & Model Routing
 
-QuizPilot supports free and commercial models via NVIDIA NIM and OpenRouter:
+AssessPilot supports free and commercial models via NVIDIA NIM and OpenRouter:
 
 ### Supported Model Slugs
 
@@ -312,7 +311,7 @@ QuizPilot supports free and commercial models via NVIDIA NIM and OpenRouter:
 | `nemotron_nano_omni` | OpenRouter | `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | Multimodal |
 
 ### Configuration
-QuizPilot automatically loads your central `.env` file from the project root (or user home `~/.quizagent/.env`) without overriding shell variables:
+AssessPilot automatically loads your central `.env` file from the project root without overriding shell variables:
 
 1. Copy the example template to `.env`:
    ```bash
@@ -329,10 +328,10 @@ QuizPilot automatically loads your central `.env` file from the project root (or
 
 ## 12. Adaptive Self-Learning & DOM Evolution
 
-QuizPilot features a production-grade **Self-Learning Engine** (`quizagent/learner.py`) that continuously adapts to arbitrary, evolving assessment systems:
+AssessPilot features a production-grade **Self-Learning Engine** (`quizagent/learner.py`) that continuously adapts to arbitrary, evolving assessment systems:
 
 1. **DOM Structure Learning & Fingerprint Mining:**
-   - As QuizPilot encounters new quiz formats (custom divs, Web Components, nested shadow DOM, accessible ARIA roles), it analyzes successful element clusters.
+   - As AssessPilot encounters new assessment formats (custom divs, Web Components, nested shadow DOM, accessible ARIA roles), it analyzes successful element clusters.
    - Discovers and stores specialized CSS selector patterns for question containers, stems, option labels, and active selection markers.
    - When confidence reaches threshold, it automatically synthesizes a high-priority `LearnedAdapter` for that domain.
 
@@ -348,10 +347,10 @@ QuizPilot features a production-grade **Self-Learning Engine** (`quizagent/learn
 Inspect and manage learned models:
 ```bash
 # View cache and self-learning statistics
-quizpilot cache show
+assesspilot cache show
 
 # Reset learned patterns and transition models
-quizpilot cache clear
+assesspilot cache clear
 ```
 
 ---
@@ -360,22 +359,22 @@ quizpilot cache clear
 
 Initialize a configuration file:
 ```bash
-quizpilot config init --format yaml -o quizpilot.yaml
+assesspilot config init --format yaml -o assesspilot.yaml
 # Or JSON format:
-quizpilot config init --format json -o quizpilot.json
+assesspilot config init --format json -o assesspilot.json
 ```
 
 Execute using your configuration file:
 ```bash
-quizpilot run --config quizpilot.yaml
+assesspilot run --config assesspilot.yaml
 ```
 
-### Complete Configuration Schema (`quizpilot.yaml`)
+### Complete Configuration Schema (`assesspilot.yaml`)
 ```yaml
 version: "1.0"
 
 target:
-  url: "http://127.0.0.1:5055/single"
+  url: "https://assessment.example.edu/exam"
   adapter: "auto"              # auto | generic | moodle
   custom_profile: null         # Optional path to site selector JSON
 
@@ -418,40 +417,18 @@ execution:
 
 ---
 
-## 14. Local Practice Assessment Demo
+## 14. Security & Responsible Use
 
-QuizPilot bundles a self-contained local practice assessment application with 10 question layouts:
-
-1. **Start the local practice server:**
-   ```bash
-   python testsite/app.py 5055
-   ```
-2. **In a second terminal, execute QuizPilot:**
-   ```bash
-   # Run against single-page quiz with answer key
-   quizpilot run "http://127.0.0.1:5055/single" --key examples/key_example.json
-
-   # Run with simulated student behavior
-   quizpilot run "http://127.0.0.1:5055/single" --behavior student --speed 2.0
-
-   # Run with AI assistance (mock mode)
-   quizpilot run "http://127.0.0.1:5055/single" --mock-ai
-   ```
-
----
-
-## 15. Security & Responsible Use
-
-- **Authorized Practice Only:** QuizPilot is intended for educational practice, self-study, and authorized system testing.
-- **No Anti-Bot Bypass:** QuizPilot contains no bypasses for CAPTCHAs, biometric proctoring, or security access controls.
+- **Authorized Practice Only:** AssessPilot is intended for educational practice, self-study, and authorized system testing.
+- **No Anti-Bot Bypass:** AssessPilot contains no bypasses for CAPTCHAs, biometric proctoring, or security access controls.
 - **No Autonomous Live Submission:** Final submission requires confirmation (`--confirm-submit`), preventing accidental submissions on graded exams.
 - **Credential Protection:** Passwords and API keys are strictly excluded from logs, error reports, and traces.
 
 ---
 
-## 16. Architecture
+## 15. Architecture
 
-QuizPilot uses a clean modular architecture:
+AssessPilot uses a clean modular architecture:
 
 ```
 quizagent/
@@ -476,9 +453,9 @@ quizagent/
 
 ---
 
-## 17. Troubleshooting & Diagnostics
+## 16. Troubleshooting & Diagnostics
 
-Run `quizpilot doctor` to diagnose configuration problems:
+Run `assesspilot doctor` to diagnose configuration problems:
 
 | Issue | Cause | Resolution |
 |---|---|---|
@@ -489,20 +466,11 @@ Run `quizpilot doctor` to diagnose configuration problems:
 
 ---
 
-## 18. Development & Automated Testing
+## 17. Development & Automated Testing
 
 Run the automated test suite (87 tests covering CLI, adapters, AI mocks, learning, and reports):
 ```bash
 python -m pytest tests -v
-```
-
-Run end-to-end tests against the local test site:
-```bash
-# Terminal 1: Start test server
-python testsite/app.py 5055
-
-# Terminal 2: Run E2E test matrix
-python tests/e2e.py
 ```
 
 Build distribution packages:
@@ -512,7 +480,7 @@ python -m build
 
 ---
 
-## 19. Contributing
+## 18. Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -524,12 +492,12 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and ou
 
 ---
 
-## 20. Roadmap
+## 19. Roadmap
 
 - [x] Cross-platform Chrome detection and profile isolation.
-- [x] Unified interactive wizard (`quizpilot run`).
+- [x] Unified interactive wizard (`assesspilot run`).
 - [x] YAML and JSON configuration file parser.
-- [x] Comprehensive diagnostic suite (`quizpilot doctor`).
+- [x] Comprehensive diagnostic suite (`assesspilot doctor`).
 - [x] Multi-model AI routing with human review mode.
 - [x] Adaptive Self-Learning Engine with Markov Flow Graph Evolution.
 - [ ] Export reports to HTML and PDF formats.
@@ -538,6 +506,6 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and ou
 
 ---
 
-## 21. License
+## 20. License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

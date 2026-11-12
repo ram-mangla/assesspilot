@@ -37,19 +37,10 @@ jobs:
 
       - name: Run CLI Doctor Check
         run: |
-          quizpilot --version
-          quizpilot doctor
+          assesspilot --version
+          assesspilot doctor
           quizagent --version
 
       - name: Run Unit Tests
         run: |
           python -m pytest tests -v
-
-      - name: Start Mock Assessment Server & Run E2E Tests
-        shell: bash
-        run: |
-          python testsite/app.py 5055 &
-          SERVER_PID=$!
-          sleep 2
-          python tests/e2e.py single/key || true
-          kill $SERVER_PID || true

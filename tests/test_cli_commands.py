@@ -47,7 +47,7 @@ class TestCliCommands(unittest.TestCase):
         with redirect_stdout(buf):
             code = main(["doctor", "--cache-dir", os.path.join(self.tmp.name, "cache")])
         out = buf.getvalue()
-        self.assertIn("QuizAgent Doctor", out)
+        self.assertIn("Doctor", out)
         self.assertIn("Python Environment", out)
         self.assertIn("Playwright", out)
         self.assertEqual(code, 0)

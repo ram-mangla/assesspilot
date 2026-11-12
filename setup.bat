@@ -1,5 +1,5 @@
 @echo off
-REM QuizPilot One-Shot Setup (Windows)
+REM AssessPilot One-Shot Setup (Windows)
 python -m venv .venv || exit /b 1
 call .venv\Scripts\activate.bat
 python -m pip install --upgrade pip
@@ -10,5 +10,5 @@ echo Setup completed successfully!
 echo Activate your environment:
 echo   .venv\Scripts\activate.bat
 echo Then run:
-echo   quizpilot doctor
-echo   quizpilot --help
+echo   assesspilot doctor
+echo   assesspilot --help

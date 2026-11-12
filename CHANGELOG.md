@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the QuizPilot project will be documented in this file.
+All notable changes to the AssessPilot project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -8,12 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-11-12
 
 ### Added
-- **Unified CLI Product Interface (`quizpilot` and `quizagent`):**
-  - `quizpilot --help` with comprehensive command and flag documentation.
-  - `quizpilot --version` printing application version.
-  - `quizpilot doctor` diagnosing Python environment, Playwright installation, Chrome detection, API key configuration, and cache health.
-  - `quizpilot config init` with interactive and templated configuration generation (YAML and JSON formats).
-  - `quizpilot run` supporting both an intuitive, guided interactive CLI experience and full direct command-line arguments.
+- **Unified CLI Product Interface (`assesspilot` and `quizagent`):**
+  - `assesspilot --help` with comprehensive command and flag documentation.
+  - `assesspilot --version` printing application version.
+  - `assesspilot doctor` diagnosing Python environment, Playwright installation, Chrome detection, API key configuration, and cache health.
+  - `assesspilot config init` with interactive and templated configuration generation (YAML and JSON formats).
+  - `assesspilot run` supporting both an intuitive, guided interactive CLI experience and direct command-line arguments.
 - **Adaptive Self-Learning & DOM Evolution Engine:**
   - Automated DOM pattern discovery, fingerprint clustering, and high-priority `LearnedAdapter` synthesis.
   - Markov state transition graph learning navigation flows, buttons, and phase completions.
@@ -30,11 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Built-in Mock AI provider for offline testing and deterministic CI runs.
 - **Packaging & Distribution:**
   - Modern `pyproject.toml` specification for installation via `pip`, `pipx`, or `uv`.
-  - Dual console entrypoints: `quizpilot = "quizagent.cli:main"` and `quizagent = "quizagent.cli:main"`.
+  - Dual console entrypoints: `assesspilot = "quizagent.cli:main"` and `quizagent = "quizagent.cli:main"`.
 - **Automated Testing & QA:**
   - Cross-platform test suite supporting Windows, Linux, and macOS (87 automated tests passing).
   - Multi-OS GitHub Actions workflow.
-  - Local mock assessment application (`testsite/app.py`) covering 10 distinct quiz formats.
 - **Security & Privacy:**
   - Comprehensive `.gitignore` to prevent credential and session leakages.
   - Masked password prompts (`getpass`) and redacted environment variable logs.

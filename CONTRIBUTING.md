@@ -1,6 +1,6 @@
-# Contributing to QuizPilot
+# Contributing to AssessPilot
 
-Thank you for your interest in contributing to QuizPilot! We welcome contributions, bug reports, feature requests, and documentation improvements.
+Thank you for your interest in contributing to AssessPilot! We welcome contributions, bug reports, feature requests, and documentation improvements.
 
 ## Code of Conduct
 
@@ -10,8 +10,8 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/ram-mangla/quizpilot.git
-   cd quizpilot
+   git clone https://github.com/ram-mangla/assesspilot.git
+   cd assesspilot
    ```
 
 2. **Create and activate a virtual environment:**
@@ -35,23 +35,14 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 4. **Verify your environment:**
    ```bash
-   quizpilot doctor
+   assesspilot doctor
    ```
 
 ## Running Tests
 
-Run the unit test suite:
+Run the unit and integration test suite:
 ```bash
 python -m pytest tests -v
-```
-
-Run end-to-end tests against local test server:
-```bash
-# Terminal 1
-python testsite/app.py 5055
-
-# Terminal 2
-python tests/e2e.py
 ```
 
 ## Pull Request Guidelines

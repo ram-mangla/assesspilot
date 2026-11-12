@@ -1,12 +1,12 @@
 name: "✨ Feature Request"
-description: "Suggest an idea or enhancement for QuizPilot"
+description: "Suggest an idea or enhancement for AssessPilot"
 title: "[Feature]: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        We welcome ideas to make QuizPilot smarter, more reliable, and easier to use!
+        We welcome ideas to make AssessPilot smarter, more reliable, and easier to use!
   - type: textarea
     id: problem
     attributes:
