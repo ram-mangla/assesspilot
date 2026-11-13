@@ -60,7 +60,8 @@ class GenericAdapter:
             loc = lambda uid, fr=fr: fr.locator(f'[data-qa="{uid}"]')
             navs += [Nav(n["text"], classify(n["text"], n["modal"]), loc(n["uid"]), n["disabled"], n["modal"]) for n in res["navs"]]
             texts.append(res["text"])
-            login = login or res["hasPassword"]
+            login = (login or res.get("hasPassword", False) or res.get("isGoogle", False)
+                     or res.get("isOAuth", False) or "accounts.google.com" in page.url.lower())
         seen = {}
         for q in questions:
             q.dup = seen.get(q.fp, 0)

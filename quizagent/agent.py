@@ -87,6 +87,8 @@ class Agent:
                             pass
                 return                               # never close the user's browser
             if self.profile:
+                from .browser_launcher import resolve_chrome_profile
+                prof_path = resolve_chrome_profile(self.profile) or self.profile
                 kw = {"headless": not self.headed, "args": ["--no-sandbox"], "viewport": {"width": 1280, "height": 900}}
                 if self.chrome_path and Path(self.chrome_path).exists():
                     kw["executable_path"] = self.chrome_path
@@ -95,9 +97,17 @@ class Agent:
                         kw["channel"] = "chrome"
                     except Exception:
                         pass
-                ctx = p.chromium.launch_persistent_context(self.profile, **kw)
-                # Chrome discards session cookies (Moodle, most login cookies) when a profile closes: persist them ourselves
-                sf = Path(self.profile) / "qa_cookies.json"
+
+                state_file = Path(prof_path) / "qa_storage_state.json"
+                if state_file.exists():
+                    try:
+                        kw["storage_state"] = str(state_file)
+                    except Exception:
+                        pass
+
+                ctx = p.chromium.launch_persistent_context(prof_path, **kw)
+                # Chrome discards session cookies (Moodle, Google OAuth, etc.) when a profile closes: persist them ourselves
+                sf = Path(prof_path) / "qa_cookies.json"
                 if sf.exists():
                     try:
                         ctx.add_cookies(json.loads(sf.read_text()))
@@ -111,6 +121,8 @@ class Agent:
                     try:
                         sf.write_text(json.dumps(ctx.cookies()))
                         sf.chmod(0o600)
+                        ctx.storage_state(path=str(state_file))
+                        state_file.chmod(0o600)
                     except Exception:
                         pass
                     ctx.close()
@@ -551,10 +563,74 @@ class Agent:
         return warn
 
     def login(self, page, ctx, url):
-        if not self.creds:
-            raise RuntimeError("login required: pass --user and --pass-env (or reuse a cached session)")
-        u, pw = self.creds
+        cur_url = page.url.lower()
+        is_google_or_oauth = (
+            "accounts.google.com" in cur_url
+            or "login.microsoftonline.com" in cur_url
+            or "/oauth" in cur_url
+            or "/signin" in cur_url
+            or "google" in cur_url
+        )
         pwd = page.locator("input[type=password]:visible").first
+
+        # Interactive OAuth / Google Login or login without credentials:
+        if is_google_or_oauth or not self.creds or pwd.count() == 0:
+            if self.headed:
+                print("\n" + "=" * 70)
+                print(" [AssessPilot] 🔑 Interactive Login / Google Sign-In Detected")
+                print(f" Current URL: {page.url}")
+                print(" -> Please complete sign-in in the open browser window.")
+                print(" -> AssessPilot will automatically detect when login succeeds and continue.")
+                print("=" * 70 + "\n")
+
+                t0 = time.time()
+                while time.time() - t0 < 300:  # 5 minutes grace period
+                    time.sleep(1.5)
+                    try:
+                        new_url = page.url.lower()
+                        # If user navigated away from OAuth/login domain or questions appeared
+                        if "accounts.google.com" not in new_url and "signin" not in new_url and "login" not in new_url:
+                            self.settle(page)
+                            obs_test = self._ad.observe(page)
+                            if obs_test.questions or not obs_test.login:
+                                break
+                        obs_test = self._ad.observe(page)
+                        if obs_test.questions:
+                            break
+                    except Exception:
+                        pass
+
+                print("[AssessPilot] ✅ Sign-in verified! Capturing session tokens and continuing...")
+                sp = self.cache.state_path(url) if self.cache else None
+                if sp:
+                    try:
+                        ctx.storage_state(path=str(sp))
+                        sp.chmod(0o600)
+                    except Exception:
+                        pass
+                if self.profile:
+                    try:
+                        from .browser_launcher import resolve_chrome_profile
+                        prof_dir = Path(resolve_chrome_profile(self.profile) or self.profile)
+                        sf = prof_dir / "qa_cookies.json"
+                        sf.write_text(json.dumps(ctx.cookies()))
+                        sf.chmod(0o600)
+                        st_file = prof_dir / "qa_storage_state.json"
+                        ctx.storage_state(path=str(st_file))
+                        st_file.chmod(0o600)
+                    except Exception:
+                        pass
+                self.settle(page)
+                return
+            else:
+                raise RuntimeError(
+                    f"Interactive authentication (Google Sign-In / OAuth) required for {page.url}. "
+                    "Please run in headed mode ('assesspilot run') to complete sign-in once in the browser window, "
+                    "or connect to your running Chrome with '--cdp http://127.0.0.1:9222'."
+                )
+
+        # Standard form-based username/password login
+        u, pw = self.creds
         form = pwd.locator("xpath=ancestor::form[1]")
         scope = form if form.count() else page
         user = scope.locator("input:not([type=password]):not([type=hidden]):not([type=submit]):not([type=checkbox]):not([type=button]):visible").first

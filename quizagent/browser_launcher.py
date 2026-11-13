@@ -149,6 +149,32 @@ def list_chrome_profiles(user_data_dir: Optional[Path] = None) -> List[Dict[str,
     return profiles
 
 
+def resolve_chrome_profile(profile_arg: Optional[str]) -> Optional[str]:
+    """Resolve a profile argument to a concrete profile directory path.
+
+    Supports:
+    1. Direct file paths (e.g. 'C:\\my-profile' or '~/.assesspilot/profile')
+    2. Named profiles in system Chrome (e.g. 'Mangla', 'Profile 1', 'Default')
+    """
+    if not profile_arg:
+        return None
+
+    # Check if it's already an existing directory or explicit path
+    p = Path(profile_arg).expanduser()
+    if p.is_dir() or str(profile_arg).startswith((".", "/", "~", "\\")) or ":" in str(profile_arg):
+        return str(p.resolve())
+
+    # Try matching against system Chrome profiles by name or ID
+    profiles = list_chrome_profiles()
+    arg_lower = profile_arg.strip().lower()
+    for prof in profiles:
+        if prof["name"].lower() == arg_lower or prof["id"].lower() == arg_lower:
+            return prof["path"]
+
+    # Fallback to resolving as directory
+    return str(p.resolve())
+
+
 def is_profile_locked(profile_path: str | Path) -> bool:
     """Check if a Chrome profile or user data directory is currently locked by a running Chrome process."""
     p = Path(profile_path)

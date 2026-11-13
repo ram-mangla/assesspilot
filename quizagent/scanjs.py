@@ -280,10 +280,15 @@ SCAN_JS = r"""
       disabled: !!e.disabled || e.getAttribute('aria-disabled') === 'true' || /\bdisabled\b/.test(e.className || ''),
       modal: modals.some(m => containsDeep(m, e)) });
   });
+  const href = location.href || '';
+  const isGoogle = /accounts\.google\.com/i.test(href) || !!document.querySelector('a[href*="accounts.google.com"], button[id*="google" i], div[id*="g_id_onload" i], [aria-label*="Google" i]');
+  const isOAuth = isGoogle || /login\.microsoftonline\.com|auth0\.com|\/oauth2?\/|\/auth\/|\/signin|\/saml/i.test(href);
   return {
     url: location.href, questions: out, navs,
     text: (document.body ? document.body.innerText : '').slice(0, 4000),
     hasPassword: deepAll(document, 'input[type=password]').some(vis),
+    isGoogle: isGoogle,
+    isOAuth: isOAuth
   };
 }
 """
