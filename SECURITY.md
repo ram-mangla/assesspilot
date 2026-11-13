@@ -13,7 +13,7 @@ AssessPilot is strictly designed and intended for **authorized practice, self-pa
 If you discover a security vulnerability in AssessPilot, please disclose it responsibly. Do **not** create a public GitHub issue.
 
 Please report security issues privately:
-- **Email:** `manglaram69@gmail.com` (or via private GitHub Security Advisory)
+- **Email:** `ram.mangla.in@gmail.com` (or via private GitHub Security Advisory)
 - Please provide a detailed description of the issue, reproducible steps, and potential impact.
 - Maintainers will acknowledge receipt within 48 hours and provide a timeline for triage and remediation.
 

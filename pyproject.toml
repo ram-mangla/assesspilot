@@ -11,7 +11,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 authors = [
-    { name = "Mangla", email = "manglaram69@gmail.com" }
+    { name = "Mangla", email = "ram.mangla.in@gmail.com" }
 ]
 keywords = [
     "playwright",
