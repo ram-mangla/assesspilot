@@ -66,6 +66,13 @@ def build_agent_from_params(params: Dict[str, Any]) -> Agent:
     ai_provider = params.get("ai_provider")
     mock_ai = params.get("mock_ai", False) or (ai_provider == "mock")
 
+    # Seamless experience: if no key file and no provider specified, auto-detect API key from env
+    if not ai_provider and not mock_ai and not key:
+        if os.environ.get("NVIDIA_API_KEY"):
+            ai_provider = "nvidia"
+        elif os.environ.get("OPENROUTER_API_KEY"):
+            ai_provider = "openrouter"
+
     if ai_provider or mock_ai:
         try:
             from .ai_strategy import AIStrategy
@@ -362,16 +369,29 @@ def main(argv: Optional[List[str]] = None) -> int:
                 print("Usage: quizagent run <URL>  OR  quizagent run --config <config.yaml>")
                 return 1
 
+        mode_str = "Headed (Visible Browser)" if params.get("headed", True) else "Headless"
+        prof_str = params.get("profile") or "Standard Chromium Session"
+        if params.get("cdp"):
+            prof_str = f"CDP Remote Debugging ({params.get('cdp')})"
+
+        print("\n" + "=" * 70)
+        print(f" AssessPilot v{__version__} — Autonomous Assessment Runner")
+        print(f" Target:  {target_url}")
+        print(f" Mode:    {mode_str}")
+        print(f" Profile: {prof_str}")
+        print("=" * 70 + "\n")
+
         agent = build_agent_from_params(params)
         rep = agent.run(target_url)
 
-        summary_data = {
-            "status": rep.get("status"),
-            "adapter": rep.get("adapter"),
-            "report_path": rep.get("report_path"),
-            "summary": rep.get("summary"),
-        }
-        print(json.dumps(summary_data, indent=2))
+        print("\n" + "=" * 70)
+        print(f" AssessPilot Run Completed: {rep.get('status', '').upper()}")
+        print(f" Adapter: {rep.get('adapter')}")
+        if rep.get("final_score_text"):
+            print(f" Final Score: {rep.get('final_score_text')}")
+        print(f" Total Steps: {len(rep.get('steps', []))}")
+        print(f" Detailed Report: {rep.get('report_path')}")
+        print("=" * 70 + "\n")
         return 0 if rep.get("status") == "completed" else 1
 
     if a.cmd == "probe":

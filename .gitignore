@@ -35,6 +35,9 @@ runs/
 *.log
 .scratch/
 .scratch_store/
+# Internal & Local Development Knowledge
+SUPERBRAIN.md
+DEV_MODELS.md
 .superbrain/
 
 # Testing & Type Checking

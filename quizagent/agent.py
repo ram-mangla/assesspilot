@@ -318,6 +318,8 @@ class Agent:
                 self.learner.learn_results_markers(obs.url, obs.text)
                 m = SCORE_RX.search(obs.text)
                 report["final_score_text"] = m.group(0) if m else None
+                score_msg = f" | Verified Result: {report['final_score_text']}" if report['final_score_text'] else ""
+                print(f" [AssessPilot] 🏁 Assessment completed successfully!{score_msg}")
                 return
 
             if phase == "unknown":
@@ -345,6 +347,7 @@ class Agent:
 
             if phase == "start":
                 nav = self.pick(obs, "start") or self.pick(obs, "next")
+                print(f" [Step {n+1:02d}] 🚀 Starting Assessment: Clicking '{nav.text}'")
                 rec["click"] = nav.text
                 self.click(nav.loc); self.settle(page); continue
 
@@ -353,6 +356,7 @@ class Agent:
                 if not nav:
                     report["status"] = "failed: modal open with no confirm button"
                     return
+                print(f" [Step {n+1:02d}] ⚠️  Confirming submission: Clicking '{nav.text}'")
                 rec["click"] = nav.text
                 if pending or re.search(r"submit|finish|turn in|end", nav.text, re.I):
                     pending = True
@@ -362,6 +366,7 @@ class Agent:
             if phase == "summary":
                 beh.pause(rng, beh.review_pause)
                 nav = self.pick(obs, "submit")
+                print(f" [Step {n+1:02d}] 📋 Summary reached: Clicking '{nav.text}'")
                 rec["click"] = nav.text
                 pending = True
                 self.click(nav.loc); self.settle(page); continue
@@ -380,11 +385,14 @@ class Agent:
                 if prev is None or (q.reliable and not self.matches(q, prev)):
                     todo.append(q)
             rec["applied"] = []
-            for q in todo:
+            if todo:
+                print(f" [Step {n+1:02d}] 📝 Answering {len(todo)} questions on page...")
+            for i, q in enumerate(todo):
                 ch = self.strategy.choose(q)
                 if ch is None:
                     applied[q.key] = SKIPPED
                     rec["applied"].append({"prompt": q.prompt[:80], "skipped": True})
+                    print(f"   [Skip] Q{i+1}: {q.prompt[:55]}... (no answer)")
                     continue
                 beh.pause(rng, beh.think, beh.read_time(q.prompt))
                 warn = self.apply(q, ch)
@@ -394,6 +402,8 @@ class Agent:
                 self.answers[q.key] = {"prompt": q.prompt, "kind": q.kind, "fp": q.fp, "chosen": chosen, "source": ch.source,
                                        "options": [o.text for o in q.options]}
                 rec["applied"].append({"prompt": q.prompt[:80], "chosen": chosen, "source": ch.source})
+                chosen_disp = ", ".join(chosen) if chosen else ch.text or "Selected"
+                print(f"   [Ans]  Q{i+1}: {q.prompt[:55]}... -> {chosen_disp} [{ch.source}]")
             if todo:
                 beh.pause(rng, beh.action_gap)
 
@@ -406,6 +416,7 @@ class Agent:
             if nav is None:
                 time.sleep(0.5); self.settle(page); continue
             rec["click"] = nav.text
+            print(f" [Step {n+1:02d}] ➡️  Navigating: Clicking '{nav.text}'")
             if nav.action == "submit":
                 pending = True
             revisit = nav.action == "next" and rng.random() < beh.revisit_p
