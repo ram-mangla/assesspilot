@@ -292,6 +292,31 @@ class Agent:
             if self._last:
                 self._emit("step", self._last)
 
+    def _click_nav(self, ctx, loc, page, ad):
+        old_pages = list(ctx.pages) if ctx else []
+        self.click(loc)
+        self.settle(page)
+        if ctx:
+            time.sleep(0.5)
+            new_pages = [p for p in ctx.pages if p not in old_pages and not p.is_closed()]
+            if new_pages:
+                new_pg = new_pages[-1]
+                try:
+                    new_pg.wait_for_load_state("domcontentloaded", timeout=10000)
+                except Exception:
+                    pass
+                new_pg.on("dialog", self._dialog)
+                try:
+                    new_pg.bring_to_front()
+                except Exception:
+                    pass
+                self._page = new_pg
+                self.settle(new_pg)
+                new_ad = A.detect(new_pg, self.cache, self.adapter_name, self.config, learner=self.learner)
+                print(f" [AssessPilot] 🔀 Switched to newly opened assessment tab: {new_pg.url} ({new_pg.title()})")
+                return new_pg, new_ad
+        return page, ad
+
     def _loop(self, page, ctx, ad, report, url):
         self._page, self._ad = page, ad
         applied: dict[str, Choice] = {}
@@ -300,6 +325,24 @@ class Agent:
         last_sig = None
         revisit = False
         beh, rng = self.beh, self.rng
+
+        # Check if an assessment child tab was already opened in this browser context
+        if ctx and len(ctx.pages) > 1:
+            for p in ctx.pages:
+                if not p.is_closed() and p != page:
+                    p_url = p.url.lower()
+                    if any(k in p_url for k in ("onlinetests.app", "assess.aspx", "takequiz", "testengine")):
+                        print(f" [AssessPilot] 🎯 Attached to active assessment tab: {p.url} ({p.title()})")
+                        page = p
+                        page.on("dialog", self._dialog)
+                        try:
+                            page.bring_to_front()
+                        except Exception:
+                            pass
+                        self._page = page
+                        self.settle(page)
+                        ad = A.detect(page, self.cache, self.adapter_name, self.config, learner=self.learner)
+                        break
 
         for n in range(self.max_steps):
             if self.stop is not None and self.stop.is_set():
@@ -370,7 +413,7 @@ class Agent:
                 nav = self.pick(obs, "start") or self.pick(obs, "next")
                 print(f" [Step {n+1:02d}] 🚀 Starting Assessment: Clicking '{nav.text}'")
                 rec["click"] = nav.text
-                self.click(nav.loc); self.settle(page); continue
+                page, ad = self._click_nav(ctx, nav.loc, page, ad); continue
 
             if phase == "confirm":
                 nav = self.pick_confirm(obs)
@@ -382,7 +425,7 @@ class Agent:
                 if pending or re.search(r"submit|finish|turn in|end", nav.text, re.I):
                     pending = True
                 beh.pause(rng, beh.action_gap)
-                self.click(nav.loc); self.settle(page); continue
+                page, ad = self._click_nav(ctx, nav.loc, page, ad); continue
 
             if phase == "summary":
                 beh.pause(rng, beh.review_pause)
@@ -390,14 +433,14 @@ class Agent:
                 print(f" [Step {n+1:02d}] 📋 Summary reached: Clicking '{nav.text}'")
                 rec["click"] = nav.text
                 pending = True
-                self.click(nav.loc); self.settle(page); continue
+                page, ad = self._click_nav(ctx, nav.loc, page, ad); continue
 
             # ---- questions
             if revisit and self.pick(obs, "prev"):
                 revisit = False
                 nav = self.pick(obs, "prev")
                 rec["click"] = nav.text + " (revisit)"
-                self.click(nav.loc); self.settle(page); continue
+                page, ad = self._click_nav(ctx, nav.loc, page, ad); continue
             revisit = False
 
             todo = []
@@ -441,7 +484,7 @@ class Agent:
             if nav.action == "submit":
                 pending = True
             revisit = nav.action == "next" and rng.random() < beh.revisit_p
-            self.click(nav.loc); self.settle(page)
+            page, ad = self._click_nav(ctx, nav.loc, page, ad)
         # max steps reached -> status stays 'running' -> converted by caller
 
     # ------------------------------------------------------------------ helpers

@@ -6,11 +6,11 @@ from .scanjs import SCAN_JS
 
 # ---- nav classification ---------------------------------------------------
 _BACK = re.compile(r"^(prev(ious)?|back|return|go back)\b|^[←«<]", re.I)
-_START = re.compile(r"^(start|begin|attempt|take|launch|retake|re-?attempt|resume|continue (your )?attempt|let.?s go)\b", re.I)
-_NEXT = re.compile(r"^(next|continue|proceed|save (&|and|&amp;) next)\b|^[→»>]|\bnext (page|question)\b", re.I)
+_START = re.compile(r"^(start|begin|attempt|take|launch|retake|re-?attempt|resume|continue (your )?attempt|let.?s go|(i )?agree|(i )?accept)\b", re.I)
+_NEXT = re.compile(r"^(next|continue|proceed|save (&|and|&amp;) next|(i )?agree|(i )?accept)\b|^[→»>]|\bnext (page|question)\b", re.I)
 _SUBMIT = re.compile(r"(submit|finish|finali[sz]e|turn in|end (the )?(quiz|test|exam|attempt)|complete (the )?(quiz|test|exam|attempt)|check answers|^done$)", re.I)
 _CONFIRM = re.compile(r"(submit|confirm|yes|^ok$|proceed|finish|start|continue|sure|agree|end now|turn in)", re.I)
-_CANCEL = re.compile(r"(cancel|^no\b|close|dismiss|return|go back|keep|not yet|stay|×)", re.I)
+_CANCEL = re.compile(r"(cancel|^no\b|close|dismiss|return|go back|keep|not yet|stay|×|disagree|i disagree)", re.I)
 
 
 def classify(text: str, modal: bool) -> str | None:

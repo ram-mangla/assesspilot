@@ -109,7 +109,14 @@ SCAN_JS = r"""
     return '';
   };
   const isPlaceholder = o => o.value === '' || /^\s*(-+|select|choose|pick|please)\b/i.test(o.textContent || '');
-  const okCtl = i => !i.disabled && (vis(i) || (i.labels && [...i.labels].some(vis)) || vis(up(i)));
+  const isBookmark = el => {
+    if (!el) return false;
+    const pr = closestDeep(el, '.question-review,[class*="review-later" i],[id*="review" i],[id*="mark" i]');
+    if (pr) return true;
+    const t = (labelOf(el) || el.name || el.id || el.innerText || el.textContent || '').toLowerCase();
+    return /review later|bookmark|flag\b|mark for review/i.test(t);
+  };
+  const okCtl = i => !i.disabled && (vis(i) || (i.labels && [...i.labels].some(vis)) || vis(up(i))) && !isBookmark(i);
 
   const MULTIHINT = /select all|choose all|all that apply|check all|one or more|multiple/i;
   const isMulti = (root, prompt) => {
@@ -121,6 +128,8 @@ SCAN_JS = r"""
   const out = [];
   const seen = new Set();
   const push = (q, first) => {
+    if (q.prompt && /^(review later|bookmark|flag)\b/i.test(q.prompt.trim()) && (!q.options || q.options.length <= 1)) return;
+    if (q.options && q.options.length === 1 && /^(review later|bookmark|flag)\b/i.test(q.options[0].text.trim())) return;
     q.uid = stamp(first);
     const r = first.getBoundingClientRect();
     q.top = r.top + window.scrollY; q.left = r.left;
@@ -193,7 +202,7 @@ SCAN_JS = r"""
     // ARIA widgets
     const aria = (sel, kind) => {
       const g = new Map();
-      R(sel).filter(e => !seen.has(e) && vis(e)).forEach(e => {
+      R(sel).filter(e => !seen.has(e) && vis(e) && !isBookmark(e)).forEach(e => {
         const grp = closestDeep(e, '[role=radiogroup],[role=group],[role=listbox]') || up(e);
         const k = stamp(grp); if (!g.has(k)) g.set(k, []); g.get(k).push(e);
       });
