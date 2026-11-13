@@ -75,7 +75,22 @@ class Agent:
                         raise RuntimeError("no visible tab found in the attached browser")
                     url = page.url
                 else:
-                    page, created = ctx.new_page(), True
+                    norm = lambda u: u.split("#")[0].split("?")[0].rstrip("/").lower()
+                    target_norm = norm(url)
+                    for pg in ctx.pages:
+                        try:
+                            if norm(pg.url) == target_norm:
+                                page = pg
+                                break
+                        except Exception:
+                            continue
+                    if page is not None:
+                        try:
+                            page.bring_to_front()
+                        except Exception:
+                            pass
+                    else:
+                        page, created = ctx.new_page(), True
                 page.on("dialog", self._dialog)
                 try:
                     yield ctx, page, url
@@ -146,6 +161,10 @@ class Agent:
             page.wait_for_load_state("domcontentloaded", timeout=5000)
         except Exception:
             pass
+        try:
+            page.wait_for_load_state("networkidle", timeout=1500)
+        except Exception:
+            pass
         for _ in range(3):
             try:
                 page.evaluate(SETTLE_JS)
@@ -157,7 +176,8 @@ class Agent:
     def probe(self, url):
         """Dry run: detect adapter, list what the scanner sees. Performs no actions."""
         with self.session(url) as (ctx, page, url):
-            if self.cdp is None or page.url != url:
+            norm = lambda u: (u or "").split("#")[0].split("?")[0].rstrip("/").lower()
+            if self.cdp is None or norm(page.url) != norm(url):
                 page.goto(url, wait_until="domcontentloaded", timeout=30000)
             self.settle(page)
             ad = A.detect(page, None, self.adapter_name, self.config)
@@ -183,7 +203,8 @@ class Agent:
 
     def run(self, url) -> dict:
         with self.session(url) as (ctx, page, url):
-            rep = self.attempt(page, ctx, url, goto=not (self.cdp and page.url == url))
+            norm = lambda u: (u or "").split("#")[0].split("?")[0].rstrip("/").lower()
+            rep = self.attempt(page, ctx, url, goto=not (self.cdp and norm(page.url) == norm(url)))
         return rep
 
     def attempt(self, page, ctx, url, goto=True, title=None) -> dict:
