@@ -176,6 +176,20 @@ class LearnedAdapter(GenericAdapter):
             "heuristic": True,
         }
 
+    def observe(self, page) -> Obs:
+        obs = super().observe(page)
+        # If the learned scoped selector returned 0 questions, fall back to generic unscoped observation!
+        if not obs.questions:
+            orig_cfg = self.scan_cfg
+            self.scan_cfg = lambda: {"heuristic": True}
+            try:
+                fallback_obs = super().observe(page)
+                if fallback_obs.questions:
+                    return fallback_obs
+            finally:
+                self.scan_cfg = orig_cfg
+        return obs
+
 
 REGISTRY = {"moodle": MoodleAdapter, "generic": GenericAdapter}
 

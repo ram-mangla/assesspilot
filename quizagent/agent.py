@@ -294,7 +294,14 @@ class Agent:
 
     def _click_nav(self, ctx, loc, page, ad):
         old_pages = list(ctx.pages) if ctx else []
-        self.click(loc)
+        try:
+            self.click(loc)
+        except Exception as e:
+            logger.warning("Navigation click failed: %s", e)
+        try:
+            page.wait_for_load_state("domcontentloaded", timeout=10000)
+        except Exception:
+            pass
         self.settle(page)
         if ctx:
             time.sleep(0.5)
@@ -501,7 +508,7 @@ class Agent:
         acts = {n.action for n in obs.navs if not n.disabled}
         if pending:
             return "summary" if "submit" in acts else "done?"
-        if "start" in acts or "next" in acts:
+        if "start" in acts:
             return "start"
         if "submit" in acts:
             return "summary"
@@ -579,7 +586,10 @@ class Agent:
             try:
                 loc.click(force=True, timeout=2000)
             except Exception:
-                loc.dispatch_event("click")
+                try:
+                    loc.dispatch_event("click", timeout=2000)
+                except Exception:
+                    pass
 
     def apply(self, q, ch: Choice) -> list[str]:
         beh, rng, warn = self.beh, self.rng, []
